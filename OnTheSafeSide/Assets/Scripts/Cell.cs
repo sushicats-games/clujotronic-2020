@@ -3,32 +3,41 @@
 
 public class Cell
 {
-    public int X { get; internal set; }
-    public int Z { get; internal set; }
+    public int x { get; internal set; }
+    public int z { get; internal set; }
+    public int rotation = 0; // 0 1 2 3 
     public World world { get; internal set; }
-    public bool IsPreview { get; internal set; }
-    public string Name { get; internal set; }
-    public Material MaterialOverride { get; set; }
+    public bool isPreview { get; internal set; }
+    public string name { get; internal set; }
+    public Material materialOverride { get; set; }
 
     private GameObject _view;
 
     public void UpdateView()
     {
         Dispose();
-        _view = (GameObject) Object.Instantiate(world.TestBlock, world.ToVector(X,Z), Quaternion.identity);
-        if (MaterialOverride != null)
+
+        _view = (GameObject) Object.Instantiate(
+            original: world.TestBlock,
+            position: world.ToVector(x,z), 
+            rotation: Quaternion.Euler(0, rotation * 90, 0));
+
+        if (materialOverride != null)
         {
             var rend = _view.GetComponent<MeshRenderer>();
-            rend.material = MaterialOverride;
+            rend.material = materialOverride;
         }
-        if (IsPreview)
+        if (isPreview)
         {
             var collider = _view.GetComponent<Collider>();
-            collider.enabled = false;
+            if (collider)
+            {
+                collider.enabled = false;
+            }
         }
-        if (Name != null)
+        if (name != null)
         {
-            _view.name = Name;
+            _view.name = name;
         }
     }
 

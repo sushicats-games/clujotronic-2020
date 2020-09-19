@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class Controller : MonoBehaviour
 {
     new public Camera camera;
     public World world;
+    int placementRotation = 0; // 0 1 2 3
 
     // Start is called before the first frame update
     void Start()
@@ -14,6 +16,27 @@ public class Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        HandleMouseScroll();
+        HandleMouseClicks();
+        ShowPlacementPreview();
+    }
+
+    private void HandleMouseScroll()
+    {
+        if (Input.mouseScrollDelta.y > 0)
+        {
+            Debug.Log("Left");
+            NextRotationAction();
+        }
+        else if (Input.mouseScrollDelta.y < 0)
+        {
+            Debug.Log("Right");
+            PrevRotationAction();
+        }
+    }
+
+    private void HandleMouseClicks()
+    {
         if (Input.GetMouseButtonDown(0))
         {
             AddAction();
@@ -22,16 +45,22 @@ public class Controller : MonoBehaviour
         {
             DeleteAction();
         }
-        else
-        {
-            ShowPreview();
-        }
+    }
+
+    void NextRotationAction()
+    {
+        placementRotation = (placementRotation - 1) & 3;
+    }
+
+    void PrevRotationAction()
+    {
+        placementRotation = (placementRotation + 1) & 3;
     }
 
     void AddAction()
     {
         var position = GetPositionUnderMouse();
-        world.PutBlock(position);
+        world.PutBlock(position, placementRotation);
     }
 
     void DeleteAction()
@@ -40,10 +69,10 @@ public class Controller : MonoBehaviour
         world.EraseBlock(position);
     }
 
-    void ShowPreview()
+    void ShowPlacementPreview()
     {
         var position = GetPositionUnderMouse();
-        world.PreviewBlock(position);
+        world.ShowPreviewBlock(position, placementRotation);
     }
 
     Vector3 GetPositionUnderMouse()

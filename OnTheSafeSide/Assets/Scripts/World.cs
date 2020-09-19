@@ -41,7 +41,7 @@ public class World : MonoBehaviour
         return CellsGrid[x, z];
     }
 
-    void ReplaceCell(Vector3 vector, Cell newCell)
+    void ReplaceCell(Vector3 vector, Cell newCell, int rotation)
     {
         var (x, z) = ToCellCoords(vector);
         var existing = CellsGrid[x, z];
@@ -52,53 +52,49 @@ public class World : MonoBehaviour
         CellsGrid[x, z] = newCell;
         if (newCell != null)
         {
-            ShowCell(newCell, x, z);
+            ShowCell(newCell, x, z, rotation);
         }
     }
 
-    private void ShowCell(Cell cell, int x, int z)
+    private void ShowCell(Cell cell, int x, int z, int rotation)
     {
-        cell.X = x;
-        cell.Z = z;
+        cell.x = x;
+        cell.z = z;
+        cell.rotation = rotation;
         cell.world = this;
         cell.UpdateView();
     }
 
-    public void PutBlock(Vector3 vector)
+    public void PutBlock(Vector3 vector, int rotation)
     {
         var cell = new Cell();
-        ReplaceCell(vector, cell);
+        ReplaceCell(vector, cell, rotation);
     }
 
-    public void PreviewBlock(Vector3 vector)
+    public void ShowPreviewBlock(Vector3 vector, int rotation)
     {
         var (x, z) = ToCellCoords(vector);
         if (Preview != null)
         {
-            if (Preview.X == x && Preview.Z == z)
+            // optimization: don't reinstantiate preview if it did not change
+            if (Preview.x == x && Preview.z == z && Preview.rotation == rotation)
             {
                 return;
             }
             Preview.Dispose();
             Preview = null;
         }
-        var existingCell = GetCell(vector);
-        if (existingCell != null)
-        {
-            Debug.Log($"already something there {existingCell.Name}");
-            return;
-        }
         var cell = new Cell();
-        cell.IsPreview = true;
-        cell.MaterialOverride = PreviewMaterial;
-        cell.Name = "Preview";
+        cell.isPreview = true;
+        cell.materialOverride = PreviewMaterial;
+        cell.name = "Preview";
         Preview = cell;
-        ShowCell(Preview, x, z);
+        ShowCell(Preview, x, z, rotation);
     }
 
     public void EraseBlock(Vector3 vector)
     {
-        ReplaceCell(vector, null);
+        ReplaceCell(vector, null, 0);
     }
 
     // Update is called once per frame
