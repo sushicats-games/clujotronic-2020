@@ -19,6 +19,11 @@ public static class CellSlotExtensions {
         return ToWallSlot(wallSlot.ToDirection() + rotation);
     }
 
+    public static CellSlot OppositeWall(CellSlot wallSlot)
+    {
+        return RotateWall(wallSlot, 2);
+    }
+
     public static int ToDirection(this CellSlot wallSlot)
     {
         switch (wallSlot)
@@ -57,6 +62,15 @@ public static class CellSlotExtensions {
             default:
                 throw new InvalidOperationException();
         }
+    }
+
+    public static CellSlot CellSlotFromDirectionVector(int x, int z)
+    {
+        if (x == 0 && z == -1) { return CellSlot.Wall0; }
+        if (x == -1 && z == 0) { return CellSlot.Wall1; }
+        if (x == 0 && z == +1) { return CellSlot.Wall2; }
+        if (x == +1 && z == 0) { return CellSlot.Wall3; }
+        throw new InvalidOperationException();
     }
 
 }

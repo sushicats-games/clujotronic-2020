@@ -112,7 +112,7 @@ public class Controller : MonoBehaviour
 
     void RotateCamera(float mouseAxisX, float mouseAxisY)
     {
-        var speed = 5;
+        var speed = 4;
         viewRotationX += mouseAxisY * speed;
         viewRotationY += mouseAxisX * speed;
         viewRotationX = Mathf.Clamp(viewRotationX, 10, 90);

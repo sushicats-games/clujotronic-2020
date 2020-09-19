@@ -27,6 +27,18 @@ public class Cell : IEnumerable<CellDecorator>
         return Floor == null && Ceiling == null && Wall0 == null && Wall1 == null && Wall2 == null && Wall3 == null;
     }
 
+    public bool IsSingleWallEmpty(CellSlot slot)
+    {
+        switch (slot)
+        {
+            case CellSlot.Wall0: return Wall0 == null;
+            case CellSlot.Wall1: return Wall1 == null;
+            case CellSlot.Wall2: return Wall2 == null;
+            case CellSlot.Wall3: return Wall3 == null;
+            default: throw new InvalidOperationException();
+        }
+    }
+
     public void PutDecorator(CellSlot slot, GameObject prefab, int rotation)
     {
         var deco = prefab == null ? null : new CellDecorator

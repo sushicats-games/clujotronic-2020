@@ -6,8 +6,8 @@ public partial class World : MonoBehaviour
     public Material PreviewMaterial;
 
     float GridSize;
-    int LengthX;
-    int LengthZ;
+    public int LengthX { private set; get; }
+    public int LengthZ { private set; get; }
 
     Cell[,] CellsGrid;
     Cell previewCell;
@@ -17,8 +17,8 @@ public partial class World : MonoBehaviour
     {
         previewCell = new Cell { name = "Preview", materialOverride = PreviewMaterial, isPreview = true, world = this };
         GridSize = 1.0f;
-        LengthX = 16;
-        LengthZ = 16;
+        LengthX = 64;
+        LengthZ = 64;
         CellsGrid = new Cell[LengthX, LengthZ];
     }
 
@@ -55,6 +55,15 @@ public partial class World : MonoBehaviour
                 ClearCellSlot(x + dx, z + dz, oppositeWallSlot);
             }
         }
+    }
+
+    internal bool IsWallBetween(int x, int z, int x2, int z2)
+    {
+        var c1 = GetCell(x, z);
+        var c2 = GetCell(x2, z2);
+        var slot1 = CellSlotExtensions.CellSlotFromDirectionVector(x2 - x, z2 - z);
+        var slot2 = CellSlotExtensions.OppositeWall(slot1);
+        return c1 != null && !c1.IsSingleWallEmpty(slot1) || c2 != null && !c2.IsSingleWallEmpty(slot2);
     }
 
     private void ClearCellSlot(int x, int z, CellSlot oppositeWallSlot)
