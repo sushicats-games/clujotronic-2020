@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4494326689857583404
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4494326689857583406}
+  - component: {fileID: 4494326689857583407}
+  m_Layer: 0
+  m_Name: ToolPicker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4494326689857583406
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4494326689857583404}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4494326689857583407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4494326689857583404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28255f7f6e5b3ab49b4e20a2c192514a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tools:
+  - {fileID: 2705764327706479554, guid: 31968915810a45844b7f0396c1d23f0a, type: 3}
+  - {fileID: 5985319484955380708, guid: 17d3b9b870876a943ad9dfdcaa8262e4, type: 3}
+  - {fileID: 7710646968554017085, guid: a469212d692aa364691a6a0dadaccef6, type: 3}
+  - {fileID: 396679917080034635, guid: 80b13766f89fd05419fabb2e0503bb7d, type: 3}
+  - {fileID: 3133856629831684893, guid: 75aea359b05f3d846888686044d7f173, type: 3}
+  - {fileID: 1620965356728033527, guid: 6bc720c6c864cc94bb7a6e91fc377b27, type: 3}
+  - {fileID: 6023230789109220660, guid: 1165b5ffe5e2e5646a0cdc08b6a9de20, type: 3}
+  - {fileID: 3525554678086011456, guid: e16727af01c8a924781ba4a089546641, type: 3}
+  - {fileID: 128867724961714936, guid: 7a5d2b7d00bd39744a2faf6d4bab7c77, type: 3}
+  - {fileID: 4004549542564021108, guid: 0999d3c53d5a3d744abdc35a1c655ed8, type: 3}
+  - {fileID: 6531979286822584395, guid: 5ab290dd062edd141a1ec4db8a85ddb2, type: 3}
+  _toolsContainer: {fileID: 0}
+  _buttonPrefab: {fileID: 7750317176488937111, guid: cee3e822ba7c0fb428a061e6408df6a8, type: 3}

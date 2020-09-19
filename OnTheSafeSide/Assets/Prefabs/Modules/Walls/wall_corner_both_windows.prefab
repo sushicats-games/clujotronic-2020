@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3713895537474497157
+--- !u!1 &3611697196138341094
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,23 +8,24 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4089753333104062527}
-  - component: {fileID: 1111935463459667866}
-  - component: {fileID: 2921310174582721360}
+  - component: {fileID: 4131071731717240924}
+  - component: {fileID: 1079553632021968889}
+  - component: {fileID: 2963279524075537203}
+  - component: {fileID: 6023230789109220660}
   m_Layer: 0
-  m_Name: wall_straigth_door
+  m_Name: wall_corner_both_windows
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4089753333104062527
+--- !u!4 &4131071731717240924
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3713895537474497157}
+  m_GameObject: {fileID: 3611697196138341094}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -32,21 +33,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &1111935463459667866
+--- !u!33 &1079553632021968889
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3713895537474497157}
-  m_Mesh: {fileID: 5610150576549085600, guid: f3bb2b1dbaeca9d4791582c3d8fb5507, type: 3}
---- !u!23 &2921310174582721360
+  m_GameObject: {fileID: 3611697196138341094}
+  m_Mesh: {fileID: -7204429450989091401, guid: d969277aaecd7764985dcfba5dda289a, type: 3}
+--- !u!23 &2963279524075537203
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3713895537474497157}
+  m_GameObject: {fileID: 3611697196138341094}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -59,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 670224309865224971, guid: f3bb2b1dbaeca9d4791582c3d8fb5507, type: 3}
+  - {fileID: 670224309865224971, guid: d969277aaecd7764985dcfba5dda289a, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -81,3 +82,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6023230789109220660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3611697196138341094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2bcbb530c55e03489d36de80ee3f4a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _name: Corner Wall (with both windows)
+  _type: wall
+  _isCorner: 1
+  _prefab: {fileID: 3611697196138341094}
+  icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}

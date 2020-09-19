@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6839871450508799708
+--- !u!1 &3172605332149793133
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,45 +8,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6172124417361572966}
-  - component: {fileID: 7063915675883338691}
-  - component: {fileID: 5038655693998395145}
+  - component: {fileID: 2831791171141643223}
+  - component: {fileID: 1216904853661623410}
+  - component: {fileID: 3965322499018969272}
+  - component: {fileID: 1620965356728033527}
   m_Layer: 0
-  m_Name: roof_prism_end
+  m_Name: wall_corner_right_window
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6172124417361572966
+--- !u!4 &2831791171141643223
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6839871450508799708}
-  m_LocalRotation: {x: 0, y: -0.38268346, z: -0, w: 0.9238795}
+  m_GameObject: {fileID: 3172605332149793133}
+  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 0.99999994, y: 1, z: 0.99999994}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &7063915675883338691
+--- !u!33 &1216904853661623410
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6839871450508799708}
-  m_Mesh: {fileID: 6603956812338802872, guid: 259c594dfbc349a4bab7f89b8688ea01, type: 3}
---- !u!23 &5038655693998395145
+  m_GameObject: {fileID: 3172605332149793133}
+  m_Mesh: {fileID: 2200354239247171546, guid: c33634ae1f6df3e4ba9be2164344a612, type: 3}
+--- !u!23 &3965322499018969272
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6839871450508799708}
+  m_GameObject: {fileID: 3172605332149793133}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -59,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 670224309865224971, guid: 259c594dfbc349a4bab7f89b8688ea01, type: 3}
+  - {fileID: 670224309865224971, guid: c33634ae1f6df3e4ba9be2164344a612, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -81,3 +82,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1620965356728033527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3172605332149793133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2bcbb530c55e03489d36de80ee3f4a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _name: Corner Wall (with right window)
+  _type: wall
+  _isCorner: 1
+  _prefab: {fileID: 3172605332149793133}
+  icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
