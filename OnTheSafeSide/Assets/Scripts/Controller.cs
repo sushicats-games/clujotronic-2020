@@ -2,7 +2,7 @@
 
 public class Controller : MonoBehaviour
 {
-    public GameObject Tool;
+    public ToolPicker ToolPicker;
     new public Camera camera;
     public World world;
     int placementRotation = 0; // 0 1 2 3 0 1 2 3
@@ -78,7 +78,7 @@ public class Controller : MonoBehaviour
     private void HandleKeyboard()
     {
         float forward = ToInt(Input.GetKey(KeyCode.W)) - ToInt(Input.GetKey(KeyCode.S));
-        float right = ToInt(Input.GetKey(KeyCode.D)) -  ToInt(Input.GetKey(KeyCode.A));
+        float right = ToInt(Input.GetKey(KeyCode.D)) - ToInt(Input.GetKey(KeyCode.A));
         if (forward == 0 && right == 0)
         {
             return;
@@ -109,7 +109,8 @@ public class Controller : MonoBehaviour
     private void ZoomInAction()
     {
         viewDistanceStep--;
-        if (viewDistanceStep < MinDistanceStep) {
+        if (viewDistanceStep < MinDistanceStep)
+        {
             viewDistanceStep = MinDistanceStep;
         }
         cameraNeedsUpdate = true;
@@ -118,12 +119,13 @@ public class Controller : MonoBehaviour
     private void ZoomOutAction()
     {
         viewDistanceStep++;
-        if (viewDistanceStep > MaxDistanceStep){
+        if (viewDistanceStep > MaxDistanceStep)
+        {
             viewDistanceStep = MaxDistanceStep;
         }
         cameraNeedsUpdate = true;
     }
-    
+
 
     void UpdateCamera()
     {
@@ -152,14 +154,14 @@ public class Controller : MonoBehaviour
         Debug.Log($"rot {placementRotation}");
     }
 
-    PutOperation CreateOp(GameObject prefab, Vector3 position)
+    PutOperation CreateOp(Tool tool, Vector3 position)
     {
         var (x, z) = world.ToCellCoords(position);
         return new PutOperation
         {
             cellX = x,
             cellZ = z,
-            prefab = prefab,
+            prefab = tool.Prefab,
             prefabCellSlot = CellSlot.Wall0, // ASSUMING WALL, use CellSlot.Wall0 | CellSlot.Wall1 for corners
             rotation = placementRotation
         };
@@ -167,8 +169,12 @@ public class Controller : MonoBehaviour
 
     void AddAction()
     {
+        var pickedTool = ToolPicker.GetPickedTool();
+        if (pickedTool == null)
+            return;
+
         var position = GetPositionUnderMouse();
-        world.PutBlock(CreateOp(Tool, position));
+        world.PutBlock(CreateOp(pickedTool, position));
     }
 
     void DeleteAction()
@@ -179,8 +185,12 @@ public class Controller : MonoBehaviour
 
     void ShowPlacementPreview()
     {
+        var pickedTool = ToolPicker.GetPickedTool();
+        if (pickedTool == null)
+            return;
+
         var position = GetPositionUnderMouse();
-        world.ShowPreviewBlock(CreateOp(Tool, position));
+        world.ShowPreviewBlock(CreateOp(pickedTool, position));
     }
 
     Vector3 GetPositionUnderMouse()

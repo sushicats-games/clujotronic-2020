@@ -27,7 +27,7 @@ public class ToolPicker : MonoBehaviour
         return _tools.SingleOrDefault(tool => tool.Name == name);
     }
 
-    public Tool GetPickedTool(string name)
+    public Tool GetPickedTool()
     {
         return _currentTool;
     }
@@ -58,6 +58,8 @@ public class ToolPicker : MonoBehaviour
             obj.name = tool.name;
             Button btn = obj.GetComponent<Button>();
             btn.onClick.AddListener(() => OnToolClicked(tool.Name));
+            Image icon = btn.gameObject.transform.GetChild(0).GetComponent<Image>();
+            icon.sprite = tool.Icon;
         }
     }
 
