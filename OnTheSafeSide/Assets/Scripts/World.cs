@@ -3,6 +3,7 @@
 public class World : MonoBehaviour
 {
     public Object TestBlock;
+    public Material PreviewMaterial;
 
     float GridSize;
     int LengthX;
@@ -10,6 +11,7 @@ public class World : MonoBehaviour
 
     Wall[,] WallsGrid;
     Cell[,] CellsGrid;
+    Cell Preview;
 
     // Start is called before the first frame update
     void Start()
@@ -50,17 +52,48 @@ public class World : MonoBehaviour
         CellsGrid[x, z] = newCell;
         if (newCell != null)
         {
-            newCell.X = x;
-            newCell.Z = z;
-            newCell.world = this;
-            newCell.UpdateView();
+            ShowCell(newCell, x, z);
         }
+    }
+
+    private void ShowCell(Cell cell, int x, int z)
+    {
+        cell.X = x;
+        cell.Z = z;
+        cell.world = this;
+        cell.UpdateView();
     }
 
     public void PutBlock(Vector3 vector)
     {
         var cell = new Cell();
         ReplaceCell(vector, cell);
+    }
+
+    public void PreviewBlock(Vector3 vector)
+    {
+        var (x, z) = ToCellCoords(vector);
+        if (Preview != null)
+        {
+            if (Preview.X == x && Preview.Z == z)
+            {
+                return;
+            }
+            Preview.Dispose();
+            Preview = null;
+        }
+        var existingCell = GetCell(vector);
+        if (existingCell != null)
+        {
+            Debug.Log($"already something there {existingCell.Name}");
+            return;
+        }
+        var cell = new Cell();
+        cell.IsPreview = true;
+        cell.MaterialOverride = PreviewMaterial;
+        cell.Name = "Preview";
+        Preview = cell;
+        ShowCell(Preview, x, z);
     }
 
     public void EraseBlock(Vector3 vector)

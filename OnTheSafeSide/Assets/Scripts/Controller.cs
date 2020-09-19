@@ -22,6 +22,10 @@ public class Controller : MonoBehaviour
         {
             DeleteAction();
         }
+        else
+        {
+            ShowPreview();
+        }
     }
 
     void AddAction()
@@ -34,6 +38,12 @@ public class Controller : MonoBehaviour
     {
         var position = GetPositionUnderMouse();
         world.EraseBlock(position);
+    }
+
+    void ShowPreview()
+    {
+        var position = GetPositionUnderMouse();
+        world.PreviewBlock(position);
     }
 
     Vector3 GetPositionUnderMouse()
