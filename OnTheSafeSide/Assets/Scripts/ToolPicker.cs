@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,6 +31,11 @@ public class ToolPicker : MonoBehaviour
     public Tool GetPickedTool()
     {
         return _currentTool;
+    }
+
+    public void ClearPickedTool()
+    {
+        _currentTool = null;
     }
 
     public void PickTool(string name)

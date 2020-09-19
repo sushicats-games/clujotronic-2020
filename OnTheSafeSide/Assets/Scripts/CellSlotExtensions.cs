@@ -7,14 +7,14 @@ public static class CellSlotExtensions {
         CellSlot result = CellSlot.None;
         if (slot.HasFlag(CellSlot.Floor)) { result |= CellSlot.Floor; }
         if (slot.HasFlag(CellSlot.Ceiling)) { result |= CellSlot.Ceiling; }
-        if (slot.HasFlag(CellSlot.Wall0)) { result |= RotateIndividual(CellSlot.Wall0, rotation); }
-        if (slot.HasFlag(CellSlot.Wall1)) { result |= RotateIndividual(CellSlot.Wall1, rotation); }
-        if (slot.HasFlag(CellSlot.Wall2)) { result |= RotateIndividual(CellSlot.Wall2, rotation); }
-        if (slot.HasFlag(CellSlot.Wall3)) { result |= RotateIndividual(CellSlot.Wall3, rotation); }
+        if (slot.HasFlag(CellSlot.Wall0)) { result |= RotateWall(CellSlot.Wall0, rotation); }
+        if (slot.HasFlag(CellSlot.Wall1)) { result |= RotateWall(CellSlot.Wall1, rotation); }
+        if (slot.HasFlag(CellSlot.Wall2)) { result |= RotateWall(CellSlot.Wall2, rotation); }
+        if (slot.HasFlag(CellSlot.Wall3)) { result |= RotateWall(CellSlot.Wall3, rotation); }
         return result;
     }
 
-    private static CellSlot RotateIndividual(CellSlot wallSlot, int rotation)
+    public static CellSlot RotateWall(CellSlot wallSlot, int rotation)
     {
         return ToWallSlot(wallSlot.ToDirection() + rotation);
     }
@@ -32,7 +32,7 @@ public static class CellSlotExtensions {
         }
     }
 
-    private static CellSlot ToWallSlot(int direction)
+    public static CellSlot ToWallSlot(int direction)
     {
         direction &= 3;
         switch (direction)
@@ -41,6 +41,19 @@ public static class CellSlotExtensions {
             case 1: return CellSlot.Wall1;
             case 2: return CellSlot.Wall2;
             case 3: return CellSlot.Wall3;
+            default:
+                throw new InvalidOperationException();
+        }
+    }
+
+    public static (int, int) ToDirectionVector(this CellSlot slot)
+    {
+        switch (slot)
+        {
+            case CellSlot.Wall0: return (0, -1);
+            case CellSlot.Wall1: return (-1, 0);
+            case CellSlot.Wall2: return (0, +1);
+            case CellSlot.Wall3: return (+1, 0);
             default:
                 throw new InvalidOperationException();
         }

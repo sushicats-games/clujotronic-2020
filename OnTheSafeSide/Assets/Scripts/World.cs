@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public partial class World : MonoBehaviour
 {
@@ -21,7 +22,7 @@ public partial class World : MonoBehaviour
         CellsGrid = new Cell[LengthX, LengthZ];
     }
 
-    public (int,int) ToCellCoords(Vector3 vector)
+    public (int, int) ToCellCoords(Vector3 vector)
     {
         int x = Mathf.FloorToInt(vector.x / GridSize + LengthX * 0.5f);
         int z = Mathf.FloorToInt(vector.z / GridSize + LengthZ * 0.5f);
@@ -33,9 +34,66 @@ public partial class World : MonoBehaviour
         return new Vector3((x - LengthX * 0.5f + 0.5f) * GridSize, 0, (z - LengthZ * 0.5f + 0.5f) * GridSize);
     }
 
+    public void PutBlock(PutOperation op)
+    {
+        if (!IsInBounds(op)) { return; };
+        var cell = GetOrAllocEmptyCell(op.cellX, op.cellZ);
+        var slot = op.prefabCellSlot.Rotate(op.rotation);
+        cell.PutDecorator(slot, op.prefab, op.rotation);
+        ClearNeighbourWallSlots(op.cellX, op.cellZ, slot);
+    }
+
+    private void ClearNeighbourWallSlots(int x, int z, CellSlot slot)
+    {
+        for (int i=0; i<4; i++)
+        {
+            var wallSlot = CellSlotExtensions.ToWallSlot(i);
+            if (slot.HasFlag(wallSlot))
+            {
+                var oppositeWallSlot = CellSlotExtensions.RotateWall(wallSlot, 2);
+                var (dx, dz) = wallSlot.ToDirectionVector();
+                ClearCellSlot(x + dx, z + dz, oppositeWallSlot);
+            }
+        }
+    }
+
+    private void ClearCellSlot(int x, int z, CellSlot oppositeWallSlot)
+    {
+        var cell = GetCell(x, z);
+        cell?.PutDecorator(oppositeWallSlot, null, 0);
+    }
+
+    public void ClearPreviewBlock()
+    {
+        previewCell?.Clear();
+    }
+
+    public void ShowPreviewBlock(PutOperation op)
+    {
+        previewCell.Clear();
+        if (!IsInBounds(op)) { return; };
+        previewCell.x = op.cellX;
+        previewCell.z = op.cellZ;
+        previewCell.PutDecorator(op.prefabCellSlot, op.prefab, op.rotation);
+    }
+
+    public void EraseBlock(Vector3 vector)
+    {
+        GetCell(vector)?.Clear();
+    }
+
     Cell GetCell(Vector3 vector)
     {
         var (x, z) = ToCellCoords(vector);
+        return GetCell(x, z);
+    }
+
+    Cell GetCell(int x, int z)
+    {
+        if (!IsInBounds(x, z))
+        {
+            return null;
+        }
         return CellsGrid[x, z];
     }
 
@@ -48,33 +106,7 @@ public partial class World : MonoBehaviour
         return CellsGrid[x, z];
     }
 
-    public void PutBlock(PutOperation op)
-    {
-        var (x, z) = (op.cellX, op.cellZ);
-        var cell = GetOrAllocEmptyCell(x, z);
-        if (op.rotation == 2)
-        {
-            Debug.DebugBreak();
-        }
-        cell.PutDecorator(op.prefabCellSlot, op.prefab, op.rotation);
-    }
+    public bool IsInBounds(int x, int z) => x >= 0 && x < LengthX && z >= 0 && z < LengthZ;
 
-    public void ShowPreviewBlock(PutOperation op)
-    {
-        previewCell.Clear();
-        previewCell.x = op.cellX;
-        previewCell.z = op.cellZ;
-        previewCell.PutDecorator(op.prefabCellSlot, op.prefab, op.rotation);
-    }
-
-    public void EraseBlock(Vector3 vector)
-    {
-        GetCell(vector)?.Clear();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public bool IsInBounds(PutOperation op) => IsInBounds(op.cellX, op.cellZ);
 }

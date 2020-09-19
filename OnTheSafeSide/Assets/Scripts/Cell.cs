@@ -29,13 +29,11 @@ public class Cell : IEnumerable<CellDecorator>
 
     public void PutDecorator(CellSlot slot, GameObject prefab, int rotation)
     {
-        var deco = new CellDecorator
+        var deco = prefab == null ? null : new CellDecorator
         {
             prefab = prefab,
             rotation = rotation
         };
-
-        slot = slot.Rotate(rotation);
 
         if (slot.HasFlag(CellSlot.Floor))
         {

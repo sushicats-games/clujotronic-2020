@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Controller : MonoBehaviour
 {
@@ -25,8 +26,11 @@ public class Controller : MonoBehaviour
     void Update()
     {
         HandleKeyboard();
-        HandleMouseScroll();
-        HandleMouseClicks();
+        if (CanInteractWithWorld())
+        {
+            HandleMouseScroll();
+            HandleMouseClicks();
+        }
         ShowPlacementPreview();
         UpdateCamera();
     }
@@ -58,6 +62,11 @@ public class Controller : MonoBehaviour
             }
         }
     }
+    
+    private bool CanInteractWithWorld()
+    {
+        return !EventSystem.current.IsPointerOverGameObject();
+    }
 
     private void HandleMouseClicks()
     {
@@ -77,6 +86,10 @@ public class Controller : MonoBehaviour
 
     private void HandleKeyboard()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ToolPicker.ClearPickedTool();
+        }
         float forward = ToInt(Input.GetKey(KeyCode.W)) - ToInt(Input.GetKey(KeyCode.S));
         float right = ToInt(Input.GetKey(KeyCode.D)) - ToInt(Input.GetKey(KeyCode.A));
         if (forward == 0 && right == 0)
@@ -143,15 +156,13 @@ public class Controller : MonoBehaviour
     void NextRotationAction()
     {
         placementRotation--;
-        while (placementRotation < 0) { placementRotation += 4; }
-        Debug.Log($"rot {placementRotation}");
+        placementRotation &= 3;
     }
 
     void PrevRotationAction()
     {
         placementRotation++;
-        while (placementRotation >= 4) { placementRotation -= 4; }
-        Debug.Log($"rot {placementRotation}");
+        placementRotation &= 3;
     }
 
     PutOperation CreateOp(Tool tool, Vector3 position)
@@ -162,7 +173,7 @@ public class Controller : MonoBehaviour
             cellX = x,
             cellZ = z,
             prefab = tool.Prefab,
-            prefabCellSlot = CellSlot.Wall0, // ASSUMING WALL, use CellSlot.Wall0 | CellSlot.Wall1 for corners
+            prefabCellSlot = ToolToCellSlot(tool),
             rotation = placementRotation
         };
     }
@@ -170,8 +181,7 @@ public class Controller : MonoBehaviour
     void AddAction()
     {
         var pickedTool = ToolPicker.GetPickedTool();
-        if (pickedTool == null)
-            return;
+        if (pickedTool == null) { return; }
 
         var position = GetPositionUnderMouse();
         world.PutBlock(CreateOp(pickedTool, position));
@@ -186,8 +196,11 @@ public class Controller : MonoBehaviour
     void ShowPlacementPreview()
     {
         var pickedTool = ToolPicker.GetPickedTool();
-        if (pickedTool == null)
+        if (pickedTool == null || !CanInteractWithWorld())
+        {
+            world.ClearPreviewBlock();
             return;
+        }
 
         var position = GetPositionUnderMouse();
         world.ShowPreviewBlock(CreateOp(pickedTool, position));
@@ -203,5 +216,33 @@ public class Controller : MonoBehaviour
             return hit.point;
         }
         return Vector3.positiveInfinity;
+    }
+
+    CellSlot ToolToCellSlot(Tool tool)
+    {
+        var slot = CellSlot.None;
+        switch (tool.Type)
+        {
+            case "wall":
+                slot = CellSlot.Wall0;
+                if (tool.IsCorner)
+                {
+                    slot |= CellSlot.Wall3;
+                }
+                break;
+            case "floor":
+                slot = CellSlot.Floor;
+                break;
+            case "roof":
+                slot = CellSlot.Ceiling;
+                break;
+            case "foliageanddecor":
+                slot = CellSlot.Floor;
+                break;
+            default:
+                Debug.LogWarning($"unhanldelaldle type {tool.Type}");
+                break;
+        }
+        return slot;
     }
 }
