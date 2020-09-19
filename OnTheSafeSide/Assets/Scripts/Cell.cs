@@ -1,52 +1,128 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 
-public class Cell
+public class Cell : IEnumerable<CellDecorator>
 {
+    public World world { get; internal set; }
+
     public int x { get; internal set; }
     public int z { get; internal set; }
-    public int rotation = 0; // 0 1 2 3 
-    public World world { get; internal set; }
     public bool isPreview { get; internal set; }
-    public string name { get; internal set; }
     public Material materialOverride { get; set; }
+    public string name;
 
-    private GameObject _view;
+    CellDecorator Wall0;
+    CellDecorator Wall1;
+    CellDecorator Wall2;
+    CellDecorator Wall3;
+
+    CellDecorator Floor;
+    CellDecorator Ceiling;
+
+    public bool IsEmpty()
+    {
+        return Floor == null && Ceiling == null && Wall0 == null && Wall1 == null && Wall2 == null && Wall3 == null;
+    }
+
+    public void PutDecorator(CellSlot slot, GameObject prefab, int rotation)
+    {
+        var deco = new CellDecorator
+        {
+            prefab = prefab,
+            rotation = rotation
+        };
+
+        slot = slot.Rotate(rotation);
+
+        if (slot.HasFlag(CellSlot.Floor))
+        {
+            DisposeDeco(Floor);
+            Floor = deco;
+        }
+
+        if (slot.HasFlag(CellSlot.Ceiling))
+        {
+            DisposeDeco(Ceiling);
+            Ceiling = deco;
+        }
+
+        if (slot.HasFlag(CellSlot.Wall0))
+        {
+            DisposeDeco(Wall0);
+            Wall0 = deco;
+        }
+
+        if (slot.HasFlag(CellSlot.Wall1))
+        {
+            DisposeDeco(Wall1);
+            Wall1 = deco;
+        }
+
+        if (slot.HasFlag(CellSlot.Wall2))
+        {
+            DisposeDeco(Wall2);
+            Wall2 = deco;
+        }
+
+        if (slot.HasFlag(CellSlot.Wall3))
+        {
+            DisposeDeco(Wall3);
+            Wall3 = deco;
+        }
+
+        UpdateView();
+    }
+
+    private void DisposeDeco(CellDecorator deco)
+    {
+        if (deco == null)
+        {
+            return;
+        }
+        deco.Dispose();
+        if (Floor == deco) { Floor = null; };
+        if (Ceiling == deco) { Ceiling = null; };
+        if (Wall0 == deco) { Wall0 = null; };
+        if (Wall1 == deco) { Wall1 = null; };
+        if (Wall2 == deco) { Wall2 = null; };
+        if (Wall3 == deco) { Wall3 = null; };
+    }
 
     public void UpdateView()
     {
-        Dispose();
-
-        _view = (GameObject) Object.Instantiate(
-            original: world.TestBlock,
-            position: world.ToVector(x,z), 
-            rotation: Quaternion.Euler(0, rotation * 90, 0));
-
-        if (materialOverride != null)
+        var position = world.ToVector(x, z);
+        foreach (var deco in this)
         {
-            var rend = _view.GetComponent<MeshRenderer>();
-            rend.material = materialOverride;
-        }
-        if (isPreview)
-        {
-            var collider = _view.GetComponent<Collider>();
-            if (collider)
-            {
-                collider.enabled = false;
-            }
-        }
-        if (name != null)
-        {
-            _view.name = name;
+            deco.UpdateView(position, materialOverride, isPreview, name);
         }
     }
 
-    public void Dispose()
+    public void Clear()
     {
-        if (_view)
+        foreach (var deco in this)
         {
-            Object.Destroy(_view);
-            _view = null;
+            deco.Dispose();
         }
+        Floor = null;
+        Ceiling = null;
+        Wall0 = null;
+        Wall1 = null;
+        Wall2 = null;
+        Wall3 = null;
     }
+
+    public IEnumerator<CellDecorator> GetEnumerator() 
+    {
+        if (Floor != null) { yield return Floor; }
+        if (Ceiling != null) { yield return Ceiling; }
+        if (Wall0 != null) { yield return Wall0; }
+        if (Wall1 != null) { yield return Wall1; }
+        if (Wall2 != null) { yield return Wall2; }
+        if (Wall3 != null) { yield return Wall3; }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

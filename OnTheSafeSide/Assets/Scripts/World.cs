@@ -1,29 +1,27 @@
 ﻿using UnityEngine;
 
-public class World : MonoBehaviour
+public partial class World : MonoBehaviour
 {
-    public Object TestBlock;
     public Material PreviewMaterial;
 
     float GridSize;
     int LengthX;
     int LengthZ;
 
-    Wall[,] WallsGrid;
     Cell[,] CellsGrid;
-    Cell Preview;
+    Cell previewCell;
 
     // Start is called before the first frame update
     void Start()
     {
+        previewCell = new Cell { name = "Preview", materialOverride = PreviewMaterial, isPreview = true, world = this };
         GridSize = 1.0f;
         LengthX = 16;
         LengthZ = 16;
-        WallsGrid = new Wall[LengthX + 1, LengthZ + 1];
         CellsGrid = new Cell[LengthX, LengthZ];
     }
 
-    (int,int) ToCellCoords(Vector3 vector)
+    public (int,int) ToCellCoords(Vector3 vector)
     {
         int x = Mathf.FloorToInt(vector.x / GridSize + LengthX * 0.5f);
         int z = Mathf.FloorToInt(vector.z / GridSize + LengthZ * 0.5f);
@@ -41,60 +39,37 @@ public class World : MonoBehaviour
         return CellsGrid[x, z];
     }
 
-    void ReplaceCell(Vector3 vector, Cell newCell, int rotation)
+    Cell GetOrAllocEmptyCell(int x, int z)
     {
-        var (x, z) = ToCellCoords(vector);
-        var existing = CellsGrid[x, z];
-        if (existing != null)
+        if (CellsGrid[x, z] == null)
         {
-            existing.Dispose();
+            CellsGrid[x, z] = new Cell { x = x, z = z, world = this };
         }
-        CellsGrid[x, z] = newCell;
-        if (newCell != null)
-        {
-            ShowCell(newCell, x, z, rotation);
-        }
+        return CellsGrid[x, z];
     }
 
-    private void ShowCell(Cell cell, int x, int z, int rotation)
+    public void PutBlock(PutOperation op)
     {
-        cell.x = x;
-        cell.z = z;
-        cell.rotation = rotation;
-        cell.world = this;
-        cell.UpdateView();
-    }
-
-    public void PutBlock(Vector3 vector, int rotation)
-    {
-        var cell = new Cell();
-        ReplaceCell(vector, cell, rotation);
-    }
-
-    public void ShowPreviewBlock(Vector3 vector, int rotation)
-    {
-        var (x, z) = ToCellCoords(vector);
-        if (Preview != null)
+        var (x, z) = (op.cellX, op.cellZ);
+        var cell = GetOrAllocEmptyCell(x, z);
+        if (op.rotation == 2)
         {
-            // optimization: don't reinstantiate preview if it did not change
-            if (Preview.x == x && Preview.z == z && Preview.rotation == rotation)
-            {
-                return;
-            }
-            Preview.Dispose();
-            Preview = null;
+            Debug.DebugBreak();
         }
-        var cell = new Cell();
-        cell.isPreview = true;
-        cell.materialOverride = PreviewMaterial;
-        cell.name = "Preview";
-        Preview = cell;
-        ShowCell(Preview, x, z, rotation);
+        cell.PutDecorator(op.prefabCellSlot, op.prefab, op.rotation);
+    }
+
+    public void ShowPreviewBlock(PutOperation op)
+    {
+        previewCell.Clear();
+        previewCell.x = op.cellX;
+        previewCell.z = op.cellZ;
+        previewCell.PutDecorator(op.prefabCellSlot, op.prefab, op.rotation);
     }
 
     public void EraseBlock(Vector3 vector)
     {
-        ReplaceCell(vector, null, 0);
+        GetCell(vector)?.Clear();
     }
 
     // Update is called once per frame

@@ -1,8 +1,8 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Controller : MonoBehaviour
 {
+    public GameObject Tool;
     new public Camera camera;
     public World world;
     int placementRotation = 0; // 0 1 2 3 0 1 2 3
@@ -132,7 +132,6 @@ public class Controller : MonoBehaviour
             return;
         }
         var viewDistance = Mathf.Pow(2.0f, viewDistanceStep / 4.0f) * 4.0f;
-        Debug.Log($"distance: {viewDistance}");
         var rotation = Quaternion.Euler(viewRotationX, viewRotationY, 0);
         camera.transform.position = new Vector3(viewX, 0, viewZ) - rotation * Vector3.forward * viewDistance;
         camera.transform.rotation = rotation;
@@ -141,18 +140,35 @@ public class Controller : MonoBehaviour
 
     void NextRotationAction()
     {
-        placementRotation = (placementRotation - 1) & 3;
+        placementRotation--;
+        while (placementRotation < 0) { placementRotation += 4; }
+        Debug.Log($"rot {placementRotation}");
     }
 
     void PrevRotationAction()
     {
-        placementRotation = (placementRotation + 1) & 3;
+        placementRotation++;
+        while (placementRotation >= 4) { placementRotation -= 4; }
+        Debug.Log($"rot {placementRotation}");
+    }
+
+    PutOperation CreateOp(GameObject prefab, Vector3 position)
+    {
+        var (x, z) = world.ToCellCoords(position);
+        return new PutOperation
+        {
+            cellX = x,
+            cellZ = z,
+            prefab = prefab,
+            prefabCellSlot = CellSlot.Wall0, // ASSUMING WALL, use CellSlot.Wall0 | CellSlot.Wall1 for corners
+            rotation = placementRotation
+        };
     }
 
     void AddAction()
     {
         var position = GetPositionUnderMouse();
-        world.PutBlock(position, placementRotation);
+        world.PutBlock(CreateOp(Tool, position));
     }
 
     void DeleteAction()
@@ -164,7 +180,7 @@ public class Controller : MonoBehaviour
     void ShowPlacementPreview()
     {
         var position = GetPositionUnderMouse();
-        world.ShowPreviewBlock(position, placementRotation);
+        world.ShowPreviewBlock(CreateOp(Tool, position));
     }
 
     Vector3 GetPositionUnderMouse()
