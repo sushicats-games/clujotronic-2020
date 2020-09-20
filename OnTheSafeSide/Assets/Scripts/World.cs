@@ -88,9 +88,9 @@ public partial class World : MonoBehaviour
         previewCell.PutDecorator(op.prefabCellSlot, op.prefab, op.rotation);
     }
 
-    public void EraseBlock(Vector3 vector)
+    public bool EraseBlock(int x, int z)
     {
-        GetCell(vector)?.Clear();
+        return GetCell(x,z)?.Clear() ?? false;
     }
 
     Cell GetCell(Vector3 vector)

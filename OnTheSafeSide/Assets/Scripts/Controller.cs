@@ -3,6 +3,9 @@ using UnityEngine.EventSystems;
 
 public class Controller : MonoBehaviour
 {
+    AudioSource audioSource;
+    int buildSfxIndex = 0;
+
     public ToolPicker ToolPicker;
     new public Camera camera;
     public World world;
@@ -17,9 +20,16 @@ public class Controller : MonoBehaviour
     internal const int MinDistanceStep = -4;
     internal const int MaxDistanceStep = 14;
 
+    public AudioClip[] buildSfx;
+    public AudioClip eraseSfx;
+
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.bypassEffects = true;
+        audioSource.bypassListenerEffects = true;
+        audioSource.bypassReverbZones = true;
     }
 
     // Update is called once per frame
@@ -178,19 +188,33 @@ public class Controller : MonoBehaviour
         };
     }
 
+
+    PutOperation previousAdd = null;
     void AddAction()
     {
         var pickedTool = ToolPicker.GetPickedTool();
         if (pickedTool == null) { return; }
 
         var position = GetPositionUnderMouse();
-        world.PutBlock(CreateOp(pickedTool, position));
+        var op = CreateOp(pickedTool, position);
+        if (op == previousAdd)
+        {
+            return;
+        }
+        previousAdd = op;
+        world.PutBlock(op);
+        audioSource.PlayOneShot(buildSfx[buildSfxIndex]);
+        buildSfxIndex = (buildSfxIndex + 1) % buildSfx.Length;
     }
 
     void DeleteAction()
     {
         var position = GetPositionUnderMouse();
-        world.EraseBlock(position);
+        var (x, z) = world.ToCellCoords(position);
+        if (world.EraseBlock(x, z))
+        {
+            audioSource.PlayOneShot(eraseSfx);
+        }
     }
 
     void ShowPlacementPreview()

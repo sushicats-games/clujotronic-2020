@@ -11,10 +11,20 @@ public class Objectives : MonoBehaviour
     int objectiveId = 0;
     Func<bool> checkCompletion = () => true;
     string objectiveMessage = "";
+    private AudioSource audioSource;
+    public AudioClip completeSfx;
+
+    const float CheckInterval = 1; // every 1 seconds
+    float checkTimer = 0;
 
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.bypassEffects = true;
+        audioSource.bypassListenerEffects = true;
+        audioSource.bypassReverbZones = true;
+
         objectiveId = 1;
         (objectiveMessage, checkCompletion) = NextObjective();
         Debug.Log(objectiveMessage);
@@ -23,9 +33,21 @@ public class Objectives : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // limit check interval
+        checkTimer += Time.deltaTime;
+        if (checkTimer > CheckInterval)
+        {
+            checkTimer = 0;
+        }
+        else
+        {
+            return;
+        }
+        // objective check
         if (checkCompletion())
         {
             objectiveId++;
+            audioSource.PlayOneShot(completeSfx);
             (objectiveMessage, checkCompletion) = NextObjective();
             Debug.Log(objectiveMessage);
         }

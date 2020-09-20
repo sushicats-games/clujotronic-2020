@@ -110,8 +110,9 @@ public class Cell : IEnumerable<CellDecorator>
         }
     }
 
-    public void Clear()
+    public bool Clear()
     {
+        bool wasEmpty = IsEmpty();
         foreach (var deco in this)
         {
             deco.Dispose();
@@ -122,6 +123,7 @@ public class Cell : IEnumerable<CellDecorator>
         Wall1 = null;
         Wall2 = null;
         Wall3 = null;
+        return !wasEmpty;
     }
 
     public IEnumerator<CellDecorator> GetEnumerator() 
