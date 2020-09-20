@@ -137,4 +137,14 @@ public class Cell : IEnumerable<CellDecorator>
     }
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+    internal bool HasFloor() => Floor != null;
+
+    internal bool HasDoor() => IsDoor(Wall0) || IsDoor(Wall1) || IsDoor(Wall2) || IsDoor(Wall3);
+
+    internal bool HasWindow() => IsWindow(Wall0) || IsWindow(Wall1) || IsWindow(Wall2) || IsWindow(Wall3);
+
+    bool IsDoor(CellDecorator deco) => deco?.prefab.name.Contains("door") ?? false;
+
+    bool IsWindow(CellDecorator deco) => deco?.prefab.name.Contains("window") ?? false;
 }

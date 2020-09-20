@@ -10,7 +10,7 @@ public class Objectives : MonoBehaviour
     public ObjectiveMessageAdapter messageAdapter;
 
     int objectiveId = 0;
-    Func<bool> checkCompletion = () => Time.time > 2;
+    Func<bool> checkCompletion = () => Time.time > 1;
     string objectiveMessage = null;
     private AudioSource audioSource;
     public AudioClip completeSfx;
@@ -66,7 +66,7 @@ public class Objectives : MonoBehaviour
             }
             case 2:
             {
-                return ("Click anywhere in the world to place a the wall!", ()
+                return ("Click anywhere in the world to place a wall!", ()
                     => world.AllCells().Where(c => !c.IsEmpty()).Any());
             }
             case 3:
@@ -91,26 +91,69 @@ public class Objectives : MonoBehaviour
             }
             case 6:
             {
-                return ("Build a house!", ()
-                    => detection.buildingStats.Count > 0);
+                var count = world.AllCells().Count(c => !c.IsEmpty());
+                return ("Right click to delete!", () =>{
+                    var currentCount = world.AllCells().Count(c => !c.IsEmpty());
+                    return currentCount == 0 || currentCount < count;
+                });
             }
             case 7:
+            {
+                return ("Build a house with a wall on each side!", ()
+                    => detection.buildingStats.Count > 0);
+            }
+            case 8:
             {
                 return ("Add an additional room to the house!", ()
                     => detection.roomStats.Count >= 2);
             }
-            case 8:
+            case 9:
             {
                 return ("Complete the house by building a total of 4 rooms!", ()
                     => detection.roomStats.Count >= 4);
             }
-            case 9:
+            case 10:
+            {
+                var houses = detection.buildingStats.Count;
+                return ("Can't have grass growing through the house, add floor tiles to house!", ()
+                    => detection.buildingStats.Values.Any(h => h.floors > 0)
+                    && detection.buildingStats.Count >= houses);
+            }
+            case 11:
+            {
+                var houses = detection.buildingStats.Count;
+                return ("Complete the floor tiles!", ()
+                    => detection.buildingStats.Values.All(h => h.size == h.floors)
+                    && detection.buildingStats.Count >= houses);
+            }
+            case 12:
+            {
+                var houses = detection.buildingStats.Count;
+                return ("Houses must have doors! Otherwise nobody can go or leave! (must be placed from the inside)", ()
+                    => detection.buildingStats.Values.Any(h => h.doors > 0)
+                    && detection.buildingStats.Count >= houses);
+            }
+            case 13:
+            {
+                var houses = detection.buildingStats.Count;
+                return ("Each room should have 1 door, otherwise they can't be used!", ()
+                    => detection.buildingStats.Values.All(h => h.doors == h.rooms.Count)
+                    && detection.buildingStats.Count >= houses);
+            }
+            case 14:
+            {
+                var houses = detection.buildingStats.Count;
+                return ("Add windows to the house! (must be placed from the inside)", ()
+                    => detection.buildingStats.Values.All(h => h.windows > 3)
+                    && detection.buildingStats.Count >= houses);
+            }
+            case 15:
             {
                 var step = controller.viewDistanceStep;
                 return ("Zoom out to see your creation with CTRL + scroll!", ()
                     => controller.viewDistanceStep >= step + 4 || controller.viewDistanceStep >= Controller.MaxDistanceStep - 4);
             }
-            case 10:
+            case 16:
             {
                 return ("Build one more house!", ()
                     => detection.buildingStats.Count > 1);

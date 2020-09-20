@@ -3,8 +3,20 @@ using UnityEngine;
 
 public class Detection : MonoBehaviour
 {
+    public class BuildingInfo
+    {
+        public int id;
+        public int size;
+        public int floors;
+        public int doors;
+        public int windows;
+        public int x;
+        public int z;
+        public HashSet<int> rooms = new HashSet<int>();
+    }
+
     public IDictionary<int, int> roomStats = new Dictionary<int, int>();
-    public IDictionary<int, int> buildingStats = new Dictionary<int, int>();
+    public IDictionary<int, BuildingInfo> buildingStats = new Dictionary<int, BuildingInfo>();
     public int statsVersion = 0;
 
     public World world;
@@ -18,7 +30,7 @@ public class Detection : MonoBehaviour
     int[,] roomMap;
     int[,] buildingMap;
     Dictionary<int, int> tempRoomStats;
-    Dictionary<int, int> tempBuildingStats;
+    Dictionary<int, BuildingInfo> tempBuildingStats;
 
     int x = 0;
     int z = 0;
@@ -84,6 +96,11 @@ public class Detection : MonoBehaviour
             z = 0;
             propagation = 0;
             state = State.RoomDetect; // start all over
+            foreach (var stat in tempBuildingStats)
+            {
+                stat.Value.x /= stat.Value.size;
+                stat.Value.z /= stat.Value.size;
+            }
             buildingStats = tempBuildingStats;
             statsVersion++;
             return;
@@ -95,9 +112,25 @@ public class Detection : MonoBehaviour
         {
             if (!tempBuildingStats.ContainsKey(v))
             {
-                tempBuildingStats.Add(v, 0);
+                tempBuildingStats.Add(v, new BuildingInfo { 
+                    doors = 0, 
+                    floors = 0,
+                    id = v,
+                    rooms = new HashSet<int>(),
+                    size = 0,
+                    windows = 0,
+                    x = 0,
+                    z = 0,
+                });
             }
-            tempBuildingStats[v]++;
+            var stats = tempBuildingStats[v];
+            stats.x += x;
+            stats.z += z;
+            stats.size++;
+            stats.rooms.Add(roomMap[x, z]);
+            if (world.HasFloor(x, z)) { stats.floors++; }
+            if (world.HasDoor(x, z)) { stats.doors++; }
+            if (world.HasWindow(x, z)) { stats.windows++; }
         }
 
         // DEBUG draw
@@ -123,7 +156,7 @@ public class Detection : MonoBehaviour
             {
                 // room detection complete
                 state = State.BuildingStats;
-                tempBuildingStats = new Dictionary<int, int>();
+                tempBuildingStats = new Dictionary<int, BuildingInfo>();
                 //Debug.Log($"room detection complete! resetting");
                 iteration = 0;
                 return;

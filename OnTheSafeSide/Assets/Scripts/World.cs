@@ -119,6 +119,12 @@ public partial class World : MonoBehaviour
 
     public bool IsInBounds(int x, int z) => x >= 0 && x < LengthX && z >= 0 && z < LengthZ;
 
+    internal bool HasFloor(int x, int z) => GetCell(x, z)?.HasFloor() ?? false;
+
+    internal bool HasDoor(int x, int z) => GetCell(x, z)?.HasDoor() ?? false;
+
+    internal bool HasWindow(int x, int z) => GetCell(x, z)?.HasWindow() ?? false;
+
     public bool IsInBounds(PutOperation op) => IsInBounds(op.cellX, op.cellZ);
 
     public IEnumerable<Cell> AllCells()
