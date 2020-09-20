@@ -49,11 +49,11 @@ class Detection : MonoBehaviour
         }
         if (z >= lengthZ)
         {
-            Debug.Log($"it {iteration} p {propagation}");
+            //Debug.Log($"it {iteration} p {propagation}");
             z = 0;
             if (iteration > 0 && propagation == 0)
             {
-                Debug.Log($"room detection complete! resetting");
+                //Debug.Log($"room detection complete! resetting");
                 iteration = 0;
             }
             else
@@ -75,11 +75,14 @@ class Detection : MonoBehaviour
         }
 
         var v = roomDetection[x, z];
-        var lx = x - lengthX * 0.5f + 0.5f;
-        var lz = z - lengthZ * 0.5f + 0.5f;
-        if (iteration > 0)
+        if (v != 0)
         {
-            Debug.DrawLine(new Vector3(lx, 0, lz), new Vector3(lx, 1, lz), new Color(Mathf.Sin(v * 95.234f), Mathf.Cos(v * 195.234f), Mathf.Sin(v * 295.234f)), 0.5f);
+            var lx = x - lengthX * 0.5f + 0.5f;
+            var lz = z - lengthZ * 0.5f + 0.5f;
+            if (iteration > 0 && propagation == 0)
+            {
+                Debug.DrawLine(new Vector3(lx, 0, lz), new Vector3(lx, 1, lz), new Color(Mathf.Sin(v * 95.234f), Mathf.Cos(v * 195.234f), Mathf.Sin(v * 295.234f)), 0.5f);
+            }
         }
         x++;
     }
