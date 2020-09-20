@@ -98,4 +98,4 @@ MonoBehaviour:
   _type: wall
   _isCorner: 1
   _prefab: {fileID: 3172605332149793133}
-  icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  icon: {fileID: -3397141571132137918, guid: bd5d215be45b17c4ba57c137ae6ab905, type: 3}

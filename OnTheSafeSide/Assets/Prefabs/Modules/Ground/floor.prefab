@@ -98,3 +98,4 @@ MonoBehaviour:
   _type: floor
   _isCorner: 0
   _prefab: {fileID: 8954560209424569624}
+  icon: {fileID: -5986287372477889363, guid: bd5d215be45b17c4ba57c137ae6ab905, type: 3}

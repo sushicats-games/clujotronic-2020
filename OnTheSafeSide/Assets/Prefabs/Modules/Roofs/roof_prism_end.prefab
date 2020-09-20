@@ -97,5 +97,5 @@ MonoBehaviour:
   _name: Roof (prism end)
   _type: roof
   _isCorner: 0
-  _prefab: {fileID: 0}
-  icon: {fileID: 0}
+  _prefab: {fileID: 6839871450508799708}
+  icon: {fileID: 2771291871406955633, guid: bd5d215be45b17c4ba57c137ae6ab905, type: 3}

@@ -98,4 +98,4 @@ MonoBehaviour:
   _type: roof
   _isCorner: 0
   _prefab: {fileID: 9130488944062902284}
-  icon: {fileID: 0}
+  icon: {fileID: 7625246202548362025, guid: bd5d215be45b17c4ba57c137ae6ab905, type: 3}
