@@ -6,16 +6,16 @@ public class Controller : MonoBehaviour
     public ToolPicker ToolPicker;
     new public Camera camera;
     public World world;
-    int placementRotation = 0; // 0 1 2 3 0 1 2 3
+    internal int placementRotation = 0; // 0 1 2 3 0 1 2 3
     bool cameraNeedsUpdate = true;
-    float viewX = 0;
-    float viewZ = 0;
-    float viewRotationY = 0; // 0..360
-    float viewRotationX = 40;
-    int viewDistanceStep = 0;
+    internal float viewX = 0;
+    internal float viewZ = 0;
+    internal float viewRotationY = 0; // 0..360
+    internal float viewRotationX = 40;
+    internal int viewDistanceStep = 4;
 
-    const int MinDistanceStep = -4;
-    const int MaxDistanceStep = 14;
+    internal const int MinDistanceStep = -4;
+    internal const int MaxDistanceStep = 14;
 
     // Start is called before the first frame update
     void Start()

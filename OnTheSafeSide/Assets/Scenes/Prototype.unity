@@ -750,6 +750,7 @@ GameObject:
   - component: {fileID: 1206911936}
   - component: {fileID: 1206911938}
   - component: {fileID: 1206911939}
+  - component: {fileID: 1206911940}
   m_Layer: 0
   m_Name: GodObject
   m_TagString: Untagged
@@ -811,7 +812,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9123a006925834f4ab7f29c6cf5ddacc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  statsVersion: 0
   world: {fileID: 1206911936}
+--- !u!114 &1206911940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1206911935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c4ffe3cc705490449962177a57ab51e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detection: {fileID: 1206911939}
+  world: {fileID: 1206911936}
+  controller: {fileID: 1206911938}
 --- !u!1 &1495765369
 GameObject:
   m_ObjectHideFlags: 0

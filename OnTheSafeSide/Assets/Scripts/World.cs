@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public partial class World : MonoBehaviour
@@ -118,4 +120,19 @@ public partial class World : MonoBehaviour
     public bool IsInBounds(int x, int z) => x >= 0 && x < LengthX && z >= 0 && z < LengthZ;
 
     public bool IsInBounds(PutOperation op) => IsInBounds(op.cellX, op.cellZ);
+
+    public IEnumerable<Cell> AllCells()
+    {
+        for (int z = 0; z < LengthZ; z++)
+        {
+            for (int x = 0; x < LengthX; x++)
+            {
+                var cell = CellsGrid[x, z];
+                if (cell != null)
+                {
+                    yield return cell;
+                }
+            }
+        }
+    }
 }
