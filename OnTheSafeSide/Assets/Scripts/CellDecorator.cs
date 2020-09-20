@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
+using UnityEngine;
 
 public class CellDecorator
 {
@@ -19,7 +21,8 @@ public class CellDecorator
         if (materialOverride != null)
         {
             var rend = _view.GetComponent<MeshRenderer>();
-            rend.material = materialOverride;
+            // rend.material = materialOverride;
+            rend.materials = rend.materials.Select(m => materialOverride).ToArray();
         }
         if (isPreview)
         {

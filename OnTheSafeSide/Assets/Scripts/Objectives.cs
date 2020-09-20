@@ -7,10 +7,11 @@ public class Objectives : MonoBehaviour
     public Detection detection;
     public World world;
     public Controller controller;
+    public ObjectiveMessageAdapter messageAdapter;
 
     int objectiveId = 0;
-    Func<bool> checkCompletion = () => true;
-    string objectiveMessage = "";
+    Func<bool> checkCompletion = () => Time.time > 2;
+    string objectiveMessage = null;
     private AudioSource audioSource;
     public AudioClip completeSfx;
 
@@ -25,9 +26,7 @@ public class Objectives : MonoBehaviour
         audioSource.bypassListenerEffects = true;
         audioSource.bypassReverbZones = true;
 
-        objectiveId = 1;
-        (objectiveMessage, checkCompletion) = NextObjective();
-        Debug.Log(objectiveMessage);
+        objectiveId = 0;
     }
 
     // Update is called once per frame
@@ -46,10 +45,11 @@ public class Objectives : MonoBehaviour
         // objective check
         if (checkCompletion())
         {
+            messageAdapter.Completed(objectiveMessage);
             objectiveId++;
             audioSource.PlayOneShot(completeSfx);
             (objectiveMessage, checkCompletion) = NextObjective();
-            Debug.Log(objectiveMessage);
+            messageAdapter.NewObjective(objectiveMessage);
         }
     }
 
