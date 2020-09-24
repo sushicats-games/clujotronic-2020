@@ -18,9 +18,12 @@ public class CellDecorator
             position: position,
             rotation: Quaternion.Euler(0, rotation * 90, 0));
 
+        var rend = _view.GetComponent<MeshRenderer>();
+
+        rend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+
         if (materialOverride != null)
         {
-            var rend = _view.GetComponent<MeshRenderer>();
             // rend.material = materialOverride;
             rend.materials = rend.materials.Select(m => materialOverride).ToArray();
         }
