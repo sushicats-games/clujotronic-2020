@@ -17,7 +17,7 @@ public class Detection : MonoBehaviour
 
     public IDictionary<int, int> roomStats = new Dictionary<int, int>();
     public IDictionary<int, BuildingInfo> buildingStats = new Dictionary<int, BuildingInfo>();
-    public int statsVersion = 0;
+    internal int statsVersion { get; private set; } = 0;
 
     public World world;
 
