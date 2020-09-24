@@ -13,14 +13,12 @@ public class CellDecorator
     {
         Dispose();
 
-        _view = (GameObject)Object.Instantiate(
+        _view = Object.Instantiate(
             original: prefab,
             position: position,
             rotation: Quaternion.Euler(0, rotation * 90, 0));
 
         var rend = _view.GetComponent<MeshRenderer>();
-
-        rend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 
         if (materialOverride != null)
         {
@@ -29,6 +27,7 @@ public class CellDecorator
         }
         if (isPreview)
         {
+            rend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             var collider = _view.GetComponent<Collider>();
             if (collider)
             {
