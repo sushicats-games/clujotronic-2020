@@ -17,6 +17,7 @@ public class Objectives : MonoBehaviour
 
     const float CheckInterval = 1; // every 1 seconds
     float checkTimer = 0;
+    bool completeShown = false;
 
     // Start is called before the first frame update
     void Start()
@@ -160,7 +161,16 @@ public class Objectives : MonoBehaviour
             }
         }
 
-        return ("Completed the game! Continue building!", () => false);
+        if (!completeShown)
+        {
+            completeShown = true;
+            var time = Time.time + 4;
+            return ("Completed the game! Continue building!", () => Time.time > time);
+        }
+        else
+        {
+            return ("", () => false);
+        }
     }
 
 }
